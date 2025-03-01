@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Account</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Step 1: Initial Form (Always visible) -->
+        <div id="step1">
+            <h2>Login Account</h2>
+            <p class="subtitle">Create your new account</p>
+
+            <div class="input-group">
+                <label for="name">Full Name</label>
+                <div class="input-container">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="name" placeholder="Enter your full name">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <div class="input-container">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+            </div>
+
+            <!-- OTP Verification Section (Initially hidden) -->
+            <div id="otpSection" style="display: none;">
+                <div class="input-group">
+                    <label for="otp">OTP Verification</label>
+                    <div class="otp-wrapper">
+                        <div id="otpContainer">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                        </div>
+                        <button id="verifyOtp" class="send-otp-btn">Send OTP</button>
+                    </div>
+                </div>
+            </div>
+
+            <button id="checkUser">Next</button>
+        </div>
+
+        <!-- Registration Form -->
+        <div id="registrationSection" style="display: none;">
+            <h2>Register Account</h2>
+            <p class="subtitle">Create your new account</p>
+
+            <div class="input-group">
+                <label for="regName">Full Name</label>
+                <div class="input-container">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="regName" placeholder="Enter your full name">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="regEmail">Email Address</label>
+                <div class="input-container">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" id="regEmail" placeholder="Enter your email">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="input-container">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="password" placeholder="Enter password">
+                    <span class="password-toggle">👁️</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-container">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="confirmPassword" placeholder="Confirm password">
+                </div>
+            </div>
+
+            <div class="role-selection">
+                <div class="role-option student-role">
+                    <input type="radio" id="studentRole" name="role" value="student" checked>
+                    <label for="studentRole">
+                        <span class="role-icon">👨‍🎓</span>
+                        Student
+                    </label>
+                </div>
+
+                <div class="role-option teacher-role">
+                    <input type="radio" id="teacherRole" name="role" value="admin">
+                    <label for="teacherRole">
+                        <span class="role-icon">👨‍🏫</span>
+                        Admin
+                    </label>
+                </div>
+            </div>
+
+            <button id="registerUser" class="register-btn">Register</button>
+        </div>
+
+        <!-- Login Section -->
+        <div id="loginSection" style="display: none;">
+            <h2>Login</h2>
+
+            <div class="input-group">
+                <label for="loginEmail">Email Address</label>
+                <div class="input-container">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" id="loginEmail" placeholder="Enter your email">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="loginPassword">Password</label>
+                <div class="input-container">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="loginPassword" placeholder="Enter password">
+                    <span class="password-toggle">👁️</span>
+                </div>
+            </div>
+
+            <button id="loginUser">Login</button>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+
+</html>

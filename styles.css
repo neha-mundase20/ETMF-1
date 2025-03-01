@@ -1,0 +1,242 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Container Box */
+.container {
+    width: 480px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Titles */
+h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+/* Input Groups */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    color: #999;
+    font-size: 18px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    color: #999;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.3s;
+}
+
+input:focus {
+    border-color: #4f9af8;
+    box-shadow: 0 0 0 2px rgba(79, 154, 248, 0.2);
+}
+
+/* OTP Section */
+#otpSection {
+    margin-top: 15px;
+}
+
+.otp-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+#otpContainer {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+}
+
+.otp-box {
+    width: 1px;
+    height: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0;
+    aspect-ratio: 1/1;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    background-color: #4f9af8;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #3d86e0;
+}
+
+.send-otp-btn {
+    width: auto;
+    min-width: 80px;
+    padding: 8px 10px;
+    margin: 0;
+    height: 40px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.send-otp-btn:hover {
+    background-color: #3d9140;
+}
+
+/* Role Selection */
+.role-selection {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.role-option {
+    flex: 1;
+    position: relative;
+}
+
+.role-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.role-option label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+    border: 2px solid transparent;
+}
+
+.role-option input[type="radio"]:checked + label {
+    border-color: #4f9af8;
+    background-color: rgba(79, 154, 248, 0.1);
+}
+
+.student-role label {
+    color: #ff6b6b;
+}
+
+.student-role input[type="radio"]:checked + label {
+    border-color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+.teacher-role label {
+    color: #20bf6b;
+}
+
+.teacher-role input[type="radio"]:checked + label {
+    border-color: #20bf6b;
+    background-color: rgba(32, 191, 107, 0.1);
+}
+
+.role-icon {
+    font-size: 18px;
+}
+
+/* Register Button */
+.register-btn {
+    margin-top: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .role-selection {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #otpContainer {
+        gap: 6px;
+    }
+    
+    .otp-box {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+}

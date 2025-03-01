@@ -1,0 +1,240 @@
+/* Reset & Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    background-color: #f4f4f4;
+    overflow: hidden;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 240px;
+    background: white;
+    height: 100vh;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.sidebar h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+.profile p {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Navigation Menu */
+.nav {
+    list-style: none;
+    width: 100%;
+}
+
+.nav li {
+    padding: 12px 15px;
+    margin: 8px 0;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: #555;
+}
+
+.nav li.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: 500;
+}
+
+.nav li:hover:not(.active) {
+    background-color: #f0f0f0;
+}
+
+/* Document Viewer Container */
+.document-container {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    margin: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.document-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.document-header h2 {
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
+
+.document-content {
+    flex: 1;
+    padding: 15px;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+#pdf-canvas {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: white;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.document-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #eee;
+}
+
+.nav-button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: #0069d9;
+}
+
+#page-info {
+    font-weight: 500;
+    color: #555;
+}
+
+/* Comment Section */
+.comment-section {
+    width: 300px;
+    background: white;
+    margin: 15px 15px 15px 0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 30px); /* Ensures it fits the viewport */
+}
+
+/* Header - Fixed */
+.comment-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #f8f8f8;
+    flex-shrink: 0; /* Prevents header from shrinking */
+}
+
+/* Scrollable Comments Container */
+.comments-container {
+    flex: 1; /* Take up all available space */
+    overflow-y: auto; /* Enables scrolling */
+    padding: 15px;
+    display: flex; 
+    flex-direction: column; /* Stack comments vertically */
+    max-height: calc(100% - 160px); /* Adjust based on header and input form heights */
+}
+
+/* Individual Comment */
+.comment {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-left: 3px solid #007bff;
+    border: 1px solid #ddd;
+    flex-shrink: 0; /* Prevents comments from shrinking */
+}
+
+/* Comment Input Form - Fixed at bottom */
+.comment-input-form {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0; /* Prevents form from shrinking */
+}
+
+/* Input Field */
+.comment-input {
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    resize: none;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Send Button */
+.send-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.send-button:hover {
+    background-color: #0069d9;
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 1024px) {
+    .comment-section {
+        width: 100%;
+        margin: 10px;
+        height: 500px;
+    }
+}

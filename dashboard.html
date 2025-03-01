@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body class="dashboard">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+
+        <!-- Profile Photo -->
+        <div class="profile">
+            <img src="assets\woman.png" alt="Profile Photo">
+            <p id="user-name">John Doe</p>
+        </div>
+
+        <ul class="nav">
+            <li class="active">📌 My Task</li>
+            <li>📄 SOP Section</li>
+            <li>📊 Summary</li>
+            <li>📂 Queue</li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header Section -->
+        <div class="header">
+            <h2>Welcome, User</h2>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-container">
+            <div class="stat-card" style="background: #FFD700;">
+                <h3>0</h3>
+                <p>Total Files</p>
+            </div>
+            <div class="stat-card" style="background: #32CD32;">
+                <h3>0</h3>
+                <p>Completed</p>
+            </div>
+            <div class="stat-card" style="background: #007BFF;">
+                <h3>0</h3>
+                <p>Incompleted</p>
+            </div>
+        </div>
+
+        <!-- File List -->
+        <div class="file-list">
+            <!-- Task items will be dynamically added here -->
+            <div class="loading-message">Loading tasks...</div>
+        </div>
+    </div>
+
+    <!-- Add this script tag to link the dashboard.js file -->
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
