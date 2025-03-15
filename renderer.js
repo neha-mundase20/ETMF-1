@@ -1,268 +1,225 @@
-// Show OTP Section and Attach Listeners
-function setupOtpListeners() {
-    const inputs = document.querySelectorAll(".otp-box");
-
-    inputs.forEach((input, index) => {
-        input.addEventListener("input", (e) => {
-            let value = e.target.value;
-            e.target.value = value.replace(/[^0-9]/g, '').slice(0, 1); // Allow only one digit
-
-            if (e.target.value && index < inputs.length - 1) {
-                inputs[index + 1].focus(); // Move to next input
-            }
-        });
-
-        input.addEventListener("keydown", (e) => {
-            if (e.key === "Backspace" && !e.target.value && index > 0) {
-                inputs[index - 1].focus(); // Move to previous box on Backspace
-            }
-        });
-    });
-
-    if (inputs.length > 0) {
-        setTimeout(() => inputs[0].focus(), 50); // Focus on first input
-    }
-}
-
-// Toggle password visibility
-document.addEventListener('DOMContentLoaded', function() {
-    const passwordToggles = document.querySelectorAll('.password-toggle');
-    
-    passwordToggles.forEach(toggle => {
-        toggle.addEventListener('click', function() {
-            const passwordField = this.previousElementSibling;
-            
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                this.textContent = '👁️‍🗨️';
-            } else {
-                passwordField.type = 'password';
-                this.textContent = '👁️';
-            }
-        });
-    });
-    
-    // Set up role selection highlighting
-    const roleOptions = document.querySelectorAll('.role-option input[type="radio"]');
-    roleOptions.forEach(option => {
-        option.addEventListener('change', function() {
-            roleOptions.forEach(opt => {
-                const label = opt.nextElementSibling;
-                if (opt.checked) {
-                    label.classList.add('selected');
-                } else {
-                    label.classList.remove('selected');
-                }
-            });
-        });
-    });
+document.addEventListener("DOMContentLoaded", function () {
+  setupOtpListeners();
+  setupPasswordToggle();
+  setupRoleSelection();
 });
 
-// Check if the user is already registered
-document.getElementById("checkUser").addEventListener("click", async () => {
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
+document.getElementById("registerBtn")?.addEventListener("click", function () {
+  document.getElementById("loginSection").style.display = "none"; // Hide Login
+  document.getElementById("registrationSection").style.display = "block"; // Show Registration
+  document.getElementById("OTP&PasswordSection").style.display = "block";
+});
 
-    if (!name || !email) {
-        alert("Please enter both name and email.");
-        return;
+// document.getElementById("sendOtpBtn").addEventListener("click", function () {
+//     // Make the OTP & Password Section visible
+//     document.getElementById("OTP&PasswordSection").style.display = "block";
+// });
+
+function setupOtpListeners() {
+  const inputs = document.querySelectorAll(".otp-box");
+
+  inputs.forEach((input, index) => {
+    input.addEventListener("input", (e) => {
+      let value = e.target.value.replace(/[^0-9]/g, "").slice(0, 1);
+      e.target.value = value;
+      if (value && index < inputs.length - 1) inputs[index + 1].focus();
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !e.target.value && index > 0) {
+        inputs[index - 1].focus();
+      }
+    });
+
+    input.addEventListener("paste", (e) => {
+      const pastedData = e.clipboardData
+        .getData("text")
+        .replace(/\D/g, "")
+        .slice(0, 6);
+      if (pastedData.length === 6) {
+        inputs.forEach((inp, i) => (inp.value = pastedData[i] || ""));
+        inputs[5].focus();
+      }
+    });
+  });
+}
+
+function setupPasswordToggle() {
+  document.querySelectorAll(".password-toggle").forEach((toggle) => {
+    toggle.addEventListener("click", function () {
+      const passwordField = this.previousElementSibling;
+      passwordField.type =
+        passwordField.type === "password" ? "text" : "password";
+      this.textContent = passwordField.type === "password" ? "👁" : "👁‍🗨";
+    });
+  });
+}
+
+function setupRoleSelection() {
+  document
+    .querySelectorAll('.role-option input[type="radio"]')
+    .forEach((option) => {
+      option.addEventListener("change", function () {
+        document
+          .querySelectorAll(".role-option label")
+          .forEach((label) => label.classList.remove("selected"));
+        this.nextElementSibling.classList.add("selected");
+      });
+    });
+}
+
+// Check if user is already registered and request OTP
+document.getElementById("sendOtpBtn")?.addEventListener("click", async () => {
+  const email = document.getElementById("regEmail").value.trim();
+  if (!email) return alert("Please enter an email.");
+
+  try {
+    const response = await fetch(
+      "https://etmf.somee.com/api/auth/generate-otp",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    const data = await response.json();
+    if (data.message?.includes("OTP already sent") || data.success) {
+      document.getElementById("otpSection").style.display = "block";
+      //alert("OTP has been sent to your email.");
+      showModal("OTP has been sent to your email.");
+    } else if (response.status === 400) {
+      //alert("Email is already registered. Redirecting to login...");
+      showModal("Email is already registered. Redirecting to login...");
+      document.getElementById("registrationSection").style.display = "none";
+      document.getElementById("OTP&PasswordSection").style.display = "none";
+      document.getElementById("loginSection").style.display = "block";
+    } else {
+      //alert(data.message || "Unexpected error.");
+      showModal(data.message || "Unexpected error.");
     }
-
-    try {
-        console.time("OTP Request Time");
-
-        const response = await fetch("https://etmf.somee.com/api/auth/generate-otp", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
-        });
-
-        console.timeEnd("OTP Request Time");
-        const data = await response.json();
-
-        console.log("Response Status:", response.status);
-        console.log("Response Data:", data);
-
-        if (response.status === 400 && data.message === "Email already registered.") {
-            const jwt = localStorage.getItem("jwt"); // Get stored token
-            console.log("Stored JWT Token:", jwt);
-            alert("Email is already registered. Redirecting to login...");
-            document.getElementById("step1").style.display = "none";
-            document.getElementById("loginSection").style.display = "block";
-            return;
-        }
-
-        if (data.success || (data.message && data.message.includes("OTP already sent"))) {
-            // Show OTP section below the inputs instead of hiding initial form
-            document.getElementById("otpSection").style.display = "block";
-            document.getElementById("checkUser").style.display = "none"; // Hide the Next button
-            setupOtpListeners();
-
-            setTimeout(() => {
-                alert("OTP has been sent to your email.");
-            }, 100);
-        } else {
-            alert(data.message);
-        }
-    } catch (error) {
-        console.error("Fetch Error:", error);
-        alert("Something went wrong! Please try again.");
-    }
+  } catch (error) {
+    console.error("Error:", error);
+    //alert("Something went wrong. Try again.");
+    showModal("Something went wrong. Try again.");
+  }
 });
 
 // Verify OTP
-document.getElementById("verifyOtp").addEventListener("click", async () => {
-    const email = document.getElementById("email").value.trim();
-    const otp = Array.from(document.querySelectorAll(".otp-box"))
-        .map(input => input.value)
-        .join("");
+document.getElementById("verifyOtp")?.addEventListener("click", async () => {
+  const email = document.getElementById("regEmail").value.trim();
+  const otp = Array.from(document.querySelectorAll(".otp-box"))
+    .map((input) => input.value)
+    .join("");
+  if (otp.length !== 6) return alert("Please enter a 6-digit OTP.");
 
-    console.log("🔹 Email:", email);
-    console.log("🔹 Entered OTP:", otp);
+  try {
+    const response = await fetch("https://etmf.somee.com/api/auth/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
 
-    if (otp.length !== 6) {  // Using 6 digits OTP
-        alert("Please enter a 6-digit OTP.");
-        return;
+    const data = await response.json();
+    if (response.ok && data.token) {
+      localStorage.setItem("jwt", data.token);
+      //alert("OTP verified! Proceed to registration.");
+      showModal("OTP verified! Proceed to registration.");
+      document.getElementById("registrationSection").style.display = "block";
+    } else {
+      //alert(data.message || "Invalid OTP.");
+      showModal(data.message || "Invalid OTP.");
     }
-
-    try {
-        const response = await fetch("https://etmf.somee.com/api/auth/verify-otp", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, otp }),
-        });
-
-        const data = await response.json();
-
-        console.log("🔹 API Response:", data);
-
-        if (response.ok && data.token) {
-            alert("✅ OTP verified successfully!");
-            localStorage.setItem("jwt", data.token);
-    
-            // Populate registration form with existing data
-            document.getElementById("regName").value = document.getElementById("name").value;
-            document.getElementById("regEmail").value = email;
-            
-            // Hide the entire step1 section (which now includes OTP)
-            document.getElementById("step1").style.display = "none";
-            document.getElementById("registrationSection").style.display = "block";
-        } else {
-            alert(data.message || "Invalid OTP. Please try again.");
-        }
-
-    } catch (error) {
-        console.error(error);
-        alert("Something went wrong while verifying OTP.");
-    }
+  } catch (error) {
+    console.error(error);
+    //alert("OTP verification failed.");
+    showModal("OTP verification failed.");
+  }
 });
 
 // Register User
-document.getElementById("registerUser").addEventListener("click", async () => {
-    const name = document.getElementById("regName").value.trim();
-    const email = document.getElementById("regEmail").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const confirmPassword = document.getElementById("confirmPassword").value.trim();
-    
-    // Get selected role
-    const roleInput = document.querySelector('input[name="role"]:checked');
-    const role = roleInput ? roleInput.value : 'student';
-    
-    const jwt = localStorage.getItem("jwt");
-    console.log("JWT Token:", jwt);
+document.getElementById("registerUser")?.addEventListener("click", async () => {
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document
+    .getElementById("confirmPassword")
+    .value.trim();
+  const role =
+    document.querySelector('input[name="role"]:checked')?.value || "student";
+  const jwt = localStorage.getItem("jwt");
 
-    if (!name || !email || !password) {
-        alert("Please fill in all required fields.");
-        return;
+  if (!name || !email || !password) return alert("Fill all required fields.");
+  if (password !== confirmPassword) return alert("Passwords do not match.");
+
+  try {
+    const response = await fetch("https://etmf.somee.com/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwt}`,
+      }, // Corrected this line
+      body: JSON.stringify({ name, email, password, role }),
+    });
+
+    const data = response.ok ? await response.json() : {};
+    if (response.ok) {
+      //alert("Registration successful!");
+      showModal("Registration successful!");
+      document.getElementById("registrationSection").style.display = "none";
+      document.getElementById("OTP&PasswordSection").style.display = "none";
+      document.getElementById("loginSection").style.display = "block";
+    } else {
+      //alert(data.message || "Error occurred.");
+      showModal(data.message || "Error occurred.");
     }
-    
-    if (password !== confirmPassword) {
-        alert("Passwords do not match.");
-        return;
-    }
-
-    try {
-        const response = await fetch("https://etmf.somee.com/api/auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": jwt ? `Bearer ${jwt}` : ""
-            },
-            body: JSON.stringify({ name, email, password, role })
-        });
-
-        // Handle 401 Unauthorized separately
-        if (response.status === 401) {
-            alert("Unauthorized! Please log in again.");
-            //localStorage.removeItem("jwt"); // Clear invalid token
-            return;
-        }
-
-        // Prevent JSON parsing errors
-        const data = response.headers.get("content-length") > 0 ? await response.json() : {};
-
-        if (response.ok) {
-            alert("🎉 Registration Successful! Please log in.");
-            document.getElementById("registrationSection").style.display = "none";
-            document.getElementById("loginSection").style.display = "block";
-        } else {
-            alert("Error: " + (data.message || "Unknown error occurred."));
-        }
-    } catch (error) {
-        console.error("Fetch Error:", error);
-        alert("Something went wrong during registration.");
-    }
+  } catch (error) {
+    console.error("Error:", error);
+    //alert("Registration failed.");
+    showModal("Registration failed.");
+  }
 });
 
 // Login User
-document.getElementById("loginUser").addEventListener("click", async () => {
-    const emailField = document.getElementById("loginEmail");
-    const passwordField = document.getElementById("loginPassword");
+document.getElementById("loginBtn")?.addEventListener("click", async () => {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+  if (!email || !password) return alert("Enter email and password.");
 
-    if (!emailField || !passwordField) {
-        alert("Login fields not found. Please check your HTML.");
-        return;
+  try {
+    const response = await fetch("https://etmf.somee.com/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = response.ok ? await response.json() : {};
+    if (data.message === "Login successful" && data.user) {
+      localStorage.setItem("jwt", data.token);
+      localStorage.setItem("userId", data.user.id);
+      localStorage.setItem("userRole", data.user.role);
+      localStorage.setItem("userName", data.user.name);
+
+      //alert("Login successful!");
+      showModal("Login successful!");
+      window.location.href = "dashboard.html";
+    } else {
+      //alert(data.message || "Login failed.");
+      showModal(data.message || "Login failed.");
     }
-
-    const email = emailField.value.trim();
-    const password = passwordField.value.trim();
-
-    if (!email || !password) {
-        alert("Please enter both email and password.");
-        return;
-    }
-
-    try {
-        const response = await fetch("https://etmf.somee.com/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP Error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("API Response:", data);
-
-        if (data.message === "Login successful" && data.user) {
-            alert("✅ Login Successful!");
-
-            // Store user details in localStorage
-            localStorage.setItem("jwt", data.token);  // Store JWT token
-            localStorage.setItem("userId", data.user.id);  // Store user ID
-            localStorage.setItem("userRole", data.user.role);  // Store user role
-
-            console.log("🔹 Stored User ID:", data.user.id);
-            console.log("🔹 Stored User Role:", data.user.role);
-
-            window.location.href = "dashboard.html";
-        } else {
-            alert("Login failed: " + (data.message || "Unknown error"));
-        }
-    } catch (error) {
-        console.error("Fetch Error:", error);
-        alert("Something went wrong during login.");
-    }
+  } catch (error) {
+    console.error("Login Error:", error);
+    //alert("Something went wrong.");
+    showModal("Something went wrong.");
+  }
 });
+
+
+function showModal(message) {
+  document.getElementById("modalMessage").textContent = message;
+  document.getElementById("customModal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("customModal").style.display = "none";
+}

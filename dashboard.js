@@ -1,108 +1,144 @@
-// Function to fetch and display tasks
-async function fetchAndDisplayTasks() {
-    try {
-        const jwt = localStorage.getItem("jwt");
-        if (!jwt) {
-            alert("No authentication token found. Please log in.");
-            window.location.href = "index.html"; // Redirect to login page
-            return;
-        }
+import { fetchAndDisplayTasks } from "./components/task.js";
+import { loadStudentListSection } from "./components/student-list.js";
+import { fetchQueueData } from "./components/queue.js";
+import { showAdminSection } from "./components/admin-panel.js";
+import { showSOPSection } from "./components/SOP.js";
+import { showQueueSection } from "./components/queue.js";
+document.addEventListener("DOMContentLoaded", function () {
+  // Get all navigation items
+  const userRole = localStorage.getItem("userRole");
+  console.log(userRole);
 
-        // Fetch tasks from API
-        const response = await fetch("https://etmf.somee.com/api/task/available", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${jwt}`,
-                "Content-Type": "application/json"
-            }
-        });
+  const userName = localStorage.getItem("userName");
+  if (userName) {
+    document.getElementById("user-name").textContent = userName;
+    document.querySelector(".userName").textContent = userName;
+  }
 
-        if (!response.ok) {
-            if (response.status === 401) {
-                alert("Session expired. Please log in again.");
-                window.location.href = "index.html";
-                return;
-            }
-            throw new Error(`HTTP Error! Status: ${response.status}`);
-        }
+  // Get the admin button element
+  const adminButton = document.getElementById("admin-button");
+  const queueButton = document.getElementById("queue-button");
+  const studentList = document.getElementById("studentList");
+  // Show admin button only if the user role is 'admin'
+  if (userRole === "admin") {
+    adminButton.style.display = "block";
+    studentList.style.display = "block";
+    queueButton.style.display = "none";
+  }
 
-        const tasks = await response.json();
-        console.log("Tasks fetched:", tasks);
-        
-        // Get the file list container
-        const fileListContainer = document.querySelector('.file-list');
-        fileListContainer.innerHTML = ''; // Clear existing content
-        
-        // Check if tasks exist
-        if (tasks && tasks.length > 0) {
-            // Update stats
-            document.querySelectorAll('.stat-card h3')[0].textContent = tasks.length;
-            
-            // Count completed tasks
-            const completedTasks = tasks.filter(task => task.status === 'completed').length;
-            document.querySelectorAll('.stat-card h3')[1].textContent = completedTasks;
-            document.querySelectorAll('.stat-card h3')[2].textContent = tasks.length - completedTasks;
-            
-            // Create task items
-            tasks.forEach(task => {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
-                fileItem.dataset.taskId = task.id; // Store task ID
-                fileItem.dataset.fileUrl = task.fileUrl; // Store file URL
-                
-                fileItem.innerHTML = `
-                    <img src="assets\folder.png" alt="Folder">
-                    <p>${task.name || 'Untitled Task'}</p>
-                `;
-                
-                fileItem.addEventListener('click', function() {
-                    openDocument(task.id, task.fileUrl);
-                });
-                
-                fileListContainer.appendChild(fileItem);
-            });
-        } else {
-            // No tasks found
-            fileListContainer.innerHTML = '<p class="no-tasks">No tasks available.</p>';
-            
-            // Update stats to show zeros
-            document.querySelectorAll('.stat-card h3').forEach(stat => {
-                stat.textContent = '0';
-            });
-        }
-        
-        // Update welcome message with user's name if available
-        if (tasks.user && tasks.user.name) {
-            document.querySelector('.header h2').textContent = `Welcome, ${tasks.user.name}`;
-        }
-        
-    } catch (error) {
-        console.error("Error fetching tasks:", error);
-        document.querySelector('.file-list').innerHTML = 
-            '<p class="error-message">Error loading tasks. Please try again later.</p>';
-    }
-}
+  if (userRole === "student") {
+    queueButton.style.display = "block";
+    studentList.style.display = "none";
+  }
 
-// Function to open a document in the document viewer
-function openDocument(taskId, fileUrl) {
-    // Store task details in sessionStorage
-    console.log("Task ID: ",taskId);
-    sessionStorage.setItem('selectedTaskId', taskId);
-    sessionStorage.setItem('selectedFileUrl', fileUrl);
-    
-    // Navigate to document viewer
-    window.location.href = 'document_viewer.html';
-}
+  const navItems = document.querySelectorAll(".nav li");
 
-// Initialize dashboard when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    fetchAndDisplayTasks();
-    
-    // Toggle Active Class for Sidebar Items
-    document.querySelectorAll('.nav li').forEach(item => {
-        item.addEventListener('click', function () {
-            document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
-            this.classList.add('active');
-        });
+  // Initialize task section by default
+  showTaskSection();
+  fetchAndDisplayTasks();
+
+  // Add click event listeners to all navigation items
+  navItems.forEach((item) => {
+    item.addEventListener("click", async function () {
+      // Remove active class from all items
+      navItems.forEach((li) => li.classList.remove("active"));
+      // Add active class to clicked item
+      this.classList.add("active");
+
+      // Get the section to display from data attribute
+      const section = this.getAttribute("data-section");
+
+      // Hide all sections first
+      hideAllSections();
+
+      // Show the appropriate section based on navigation
+      switch (section) {
+        case "task":
+          showTaskSection();
+          fetchAndDisplayTasks();
+          break;
+        case "sop":
+          showSOPSection();
+          break;
+        case "students":
+          await loadStudentListSection();
+          break;
+        case "queue":
+          showQueueSection();
+          await fetchQueueData();
+          break;
+        case "admin":
+          await showAdminSection();
+          break;
+        default:
+          showTaskSection();
+          break;
+      }
     });
+  });
 });
+
+// Helper function to hide all sections
+function hideAllSections() {
+  // Hide all relevant containers
+  document.querySelector(".stats-container").style.display = "none";
+  document.querySelector(".file-list").style.display = "none";
+
+  // Hide queue container if it exists
+  const queueContainer = document.getElementById("queue-container");
+  if (queueContainer) queueContainer.style.display = "none";
+
+  // Clear main content area where dynamic content might be placed
+  const mainContent = document.querySelector(".main-content");
+
+  // Remove any dynamically added sections but keep the permanent elements
+  const permanentElements = [
+    ".header",
+    ".stats-container",
+    ".file-list",
+    "#queue-container",
+  ];
+
+  // Get all direct children of main-content
+  const children = Array.from(mainContent.children);
+
+  children.forEach((child) => {
+    // Check if this is not a permanent element
+    const isPermanent = permanentElements.some(
+      (selector) => child.matches(selector) || child.querySelector(selector)
+    );
+
+    if (!isPermanent && !child.classList.contains("header")) {
+      mainContent.removeChild(child);
+    }
+  });
+}
+
+// Show Task Section (My Task)
+function showTaskSection() {
+  document.querySelector(".stats-container").style.display = "flex";
+  document.querySelector(".file-list").style.display = "grid";
+}
+
+// Show SOP Section
+
+// Helper function to format dates
+
+// Helper function to show notifications
+function showNotification(message, type = "info") {
+  // Create notification element
+  const notification = document.createElement("div");
+  notification.className = `notification ${type}`;
+  notification.textContent = message;
+
+  // Add to document
+  document.body.appendChild(notification);
+
+  // Automatically remove after 3 seconds
+  setTimeout(() => {
+    notification.classList.add("fade-out");
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 500);
+  }, 3000);
+}

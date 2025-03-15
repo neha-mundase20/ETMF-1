@@ -12,36 +12,19 @@
 </head>
 
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>Dashboard</h2>
-        
-        <div class="profile">
-            <img src="assets\woman.png" alt="Profile Photo">
-            <p id="user-name">John Doe</p>
-        </div>
-        
-        <ul class="nav">
-            <li class="active">📌 My Task</li>
-            <li>📄 SOP Section</li>
-            <li>📊 Summary</li>
-            <li>📂 Queue</li>
-        </ul>
-    </div>
-
     <!-- Document Viewer -->
     <div class="document-container">
         <div class="document-header">
             <h2>Document Viewer</h2>
             <button id="back-to-dashboard" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
         </div>
-        
+
         <div class="document-content">
             <!-- Loading message will be replaced by the canvas when document loads -->
             <div class="loading-message">Loading document...</div>
             <canvas id="pdf-canvas"></canvas>
         </div>
-        
+
         <div class="document-navigation">
             <button id="prev-page" class="nav-button">Previous</button>
             <span id="page-info">Page 1</span>
@@ -53,19 +36,28 @@
         <div class="comment-header">
             <h3>Comments</h3>
         </div>
-        
+
         <div class="comments-container">
             <!-- Comments will be loaded here -->
         </div>
-        
+
         <div class="comment-input-form">
             <textarea class="comment-input" placeholder="Add a comment..."></textarea>
             <button class="send-button">Send</button>
         </div>
     </div>
 
+    <div id="custom-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <p id="modal-message">This is a custom message.</p>
+            <button id="modal-ok">OK</button>
+        </div>
+    </div>
+
     <!-- Link to the document-viewer.js file -->
     <script src="document-viewer.js"></script>
+    <script src="./components/comments.js"></script>
 </body>
 
 </html>

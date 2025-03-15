@@ -88,6 +88,7 @@ input:focus {
     box-shadow: 0 0 0 2px rgba(79, 154, 248, 0.2);
 }
 
+
 /* OTP Section */
 #otpSection {
     margin-top: 15px;
@@ -239,4 +240,57 @@ button:hover {
         height: 40px;
         font-size: 16px;
     }
+}
+
+.separator {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #888;
+}
+
+.register-btn {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.register-btn:hover {
+    background-color: #45a049;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 0px 10px gray;
+    z-index: 1000;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: none;
+    background: blue;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
 }

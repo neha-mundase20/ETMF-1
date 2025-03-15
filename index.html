@@ -11,47 +11,37 @@
 
 <body>
     <div class="container">
-        <!-- Step 1: Initial Form (Always visible) -->
-        <div id="step1">
+        <!-- Login Section -->
+        <div id="loginSection">
             <h2>Login Account</h2>
             <p class="subtitle">Create your new account</p>
 
             <div class="input-group">
-                <label for="name">Full Name</label>
+                <label for="email">Email Address</label>
                 <div class="input-container">
-                    <span class="input-icon">👤</span>
-                    <input type="text" id="name" placeholder="Enter your full name">
+                    <span class="input-icon">✉</span>
+                    <input type="email" id="loginEmail" placeholder="Enter your email">
                 </div>
             </div>
 
             <div class="input-group">
-                <label for="email">Email Address</label>
+                <label for="password">Password</label>
                 <div class="input-container">
-                    <span class="input-icon">✉️</span>
-                    <input type="email" id="email" placeholder="Enter your email">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="loginPassword" placeholder="Enter password">
+                    <span class="password-toggle">👁</span>
                 </div>
             </div>
 
-            <!-- OTP Verification Section (Initially hidden) -->
-            <div id="otpSection" style="display: none;">
-                <div class="input-group">
-                    <label for="otp">OTP Verification</label>
-                    <div class="otp-wrapper">
-                        <div id="otpContainer">
-                            <input type="text" class="otp-box" maxlength="1">
-                            <input type="text" class="otp-box" maxlength="1">
-                            <input type="text" class="otp-box" maxlength="1">
-                            <input type="text" class="otp-box" maxlength="1">
-                            <input type="text" class="otp-box" maxlength="1">
-                            <input type="text" class="otp-box" maxlength="1">
-                        </div>
-                        <button id="verifyOtp" class="send-otp-btn">Send OTP</button>
-                    </div>
-                </div>
-            </div>
+            <button id="loginBtn">Login</button>
 
-            <button id="checkUser">Next</button>
+            <!-- Separator (OR) -->
+            <p class="separator">OR</p>
+
+            <!-- Register Button -->
+            <button id="registerBtn" class="register-btn">Register</button>
         </div>
+
 
         <!-- Registration Form -->
         <div id="registrationSection" style="display: none;">
@@ -69,8 +59,30 @@
             <div class="input-group">
                 <label for="regEmail">Email Address</label>
                 <div class="input-container">
-                    <span class="input-icon">✉️</span>
+                    <span class="input-icon">✉</span>
                     <input type="email" id="regEmail" placeholder="Enter your email">
+                </div>
+            </div>
+
+            <button id="sendOtpBtn">Send OTP</button>
+
+        </div>
+
+        <div id="OTP&PasswordSection" style="display: none;">
+            <div id="otpSection">
+                <div class="input-group">
+                    <label for="otp">OTP Verification</label>
+                    <div class="otp-wrapper">
+                        <div id="otpContainer">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                            <input type="text" class="otp-box" maxlength="1">
+                        </div>
+                        <button id="verifyOtp" class="send-otp-btn">Verify OTP</button>
+                    </div>
                 </div>
             </div>
 
@@ -79,7 +91,7 @@
                 <div class="input-container">
                     <span class="input-icon">🔒</span>
                     <input type="password" id="password" placeholder="Enter password">
-                    <span class="password-toggle">👁️</span>
+                    <span class="password-toggle">👁</span>
                 </div>
             </div>
 
@@ -112,30 +124,15 @@
             <button id="registerUser" class="register-btn">Register</button>
         </div>
 
-        <!-- Login Section -->
-        <div id="loginSection" style="display: none;">
-            <h2>Login</h2>
+    </div>
 
-            <div class="input-group">
-                <label for="loginEmail">Email Address</label>
-                <div class="input-container">
-                    <span class="input-icon">✉️</span>
-                    <input type="email" id="loginEmail" placeholder="Enter your email">
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label for="loginPassword">Password</label>
-                <div class="input-container">
-                    <span class="input-icon">🔒</span>
-                    <input type="password" id="loginPassword" placeholder="Enter password">
-                    <span class="password-toggle">👁️</span>
-                </div>
-            </div>
-
-            <button id="loginUser">Login</button>
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <p id="modalMessage">This is a custom message!</p>
+            <button onclick="closeModal()">OK</button>
         </div>
     </div>
+      
 
     <script src="renderer.js"></script>
 </body>

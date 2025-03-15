@@ -4,16 +4,18 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron main.js"
+    "start": "electronmon  ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "electron": "^34.2.0"
+    "electron": "^34.3.2"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "electronmon": "^2.0.3",
     "etmf-1": "file:",
     "nodemailer": "^6.10.0"
   }

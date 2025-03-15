@@ -53,6 +53,9 @@ body {
     list-style: none;
     width: 100%;
     padding: 0;
+    display: flex;  
+    flex-direction: column; 
+    gap: 10px; 
 }
 
 .nav li {
@@ -175,4 +178,236 @@ body {
     .stat-card {
         width: 100%;
     }
+}
+
+/* Student Performance Table*/
+.table-container {
+    max-width: 100%;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    margin-top: 10px;
+}
+
+/* Style for search input */
+.input-box {
+    padding: 12px;
+    font-size: medium;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 20px;
+    border: 1px solid rgb(35, 179, 223);
+    margin-bottom: 10px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-box:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Headers */
+th {
+    background: #007bff;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+
+/* Table Rows */
+td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+}
+
+/* Alternate Row Color */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Hover Effect */
+tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Status Colors */
+.pass {
+    color: green;
+    font-weight: bold;
+}
+
+.fail {
+    color: red;
+    font-weight: bold;
+}
+
+/* Button Styling */
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Queue Section (Hidden by Default) */
+
+/* Queue Header */
+#queue-container h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Queue Search & Filter Row */
+.queue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.queue-header input {
+    padding: 8px;
+    width: 60%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.queue-header select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Queue Task List */
+.queue-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Task Item */
+.task-item {
+    display: flex;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Task Folder Icon */
+.task-item img {
+    width: 35px;
+    height: 35px;
+    margin-right: 12px;
+}
+
+/* Task Details */
+.task-details {
+    flex-grow: 1;
+}
+
+.task-details p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Status Dropdown */
+.status-dropdown {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.sop-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+/* Table Container */
+.sop-table-container {
+    width: 80%; /* Shrinks table */
+    min-width: 500px; /* Prevents it from being too small */
+}
+
+/* SOP Table */
+.sop-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sop-table th, .sop-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+/* Upload Section */
+.upload-section {
+    width: 35%; /* Takes up less space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#selected-file-name {
+    display: block; /* Ensures it takes full width */
+    margin-bottom: 15px; /* Adds space below the document name */
+    font-weight: bold;
+    color: #333;
+}
+
+#upload-details-container p {
+    margin-bottom: 15px; /* Adds space below "Selected Document" */
+}
+
+#description {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+
+/* Upload Button */
+.upload-btn, #final-upload-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.upload-btn:hover, #final-upload-btn:hover {
+    background-color: #0056b3;
 }

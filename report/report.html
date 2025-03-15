@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .report-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .student-info {
+            margin-bottom: 25px;
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            align-items: baseline;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            width: 40%;
+            min-width: 140px;
+            padding-right: 15px;
+        }
+        
+        .info-value {
+            flex: 1;
+            min-width: 120px;
+            font-size: 1.05em;
+        }
+        
+        .result-pass {
+            color: green;
+            font-weight: bold;
+        }
+        
+        .result-fail {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .close-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 25px;
+            transition: background-color 0.2s;
+        }
+        
+        .close-btn:hover {
+            background-color: #45a049;
+        }
+        
+        @media (max-width: 480px) {
+            .report-container {
+                padding: 15px;
+            }
+            
+            .info-row {
+                margin-bottom: 12px;
+            }
+            
+            .info-label {
+                width: 100%;
+                margin-bottom: 4px;
+            }
+            
+            .info-value {
+                width: 100%;
+                padding-left: 10px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .report-container {
+                padding: 30px;
+            }
+            
+            .info-label {
+                font-size: 1.1em;
+            }
+            
+            .info-value {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <div class="report-header">
+            <h2>Student Performance Report</h2>
+        </div>
+        
+        <div class="student-info">
+            <div class="info-row">
+                <span class="info-label">Roll Number:</span>
+                <span class="info-value" id="student-roll"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Name:</span>
+                <span class="info-value" id="student-name"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Total Tasks:</span>
+                <span class="info-value" id="student-totaltasks"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Completed Tasks:</span>
+                <span class="info-value" id="student-completed"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Pending Tasks:</span>
+                <span class="info-value" id="student-pending"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">In Process Tasks:</span>
+                <span class="info-value" id="student-inprocesstasks"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Failed Tasks:</span>
+                <span class="info-value" id="student-result"></span>
+            </div>
+        </div>
+        
+        <button class="close-btn" id="close-btn">Close</button>
+    </div>
+    
+    <script src="report.js"></script>
+</body>
+</html>

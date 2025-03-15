@@ -21,10 +21,11 @@
         </div>
 
         <ul class="nav">
-            <li class="active">📌 My Task</li>
-            <li>📄 SOP Section</li>
-            <li>📊 Summary</li>
-            <li>📂 Queue</li>
+            <li id="myTasks"  class="active" data-section="task">📌 Tasks</li>
+            <li data-section="sop">📄 SOP Section</li>
+            <li id="studentList" data-section="students" style="display: none;">📊 Student List </li>
+            <li id="queue-button" data-section="queue" style="display: none;">📂 Queue</li>
+            <li id="admin-button" data-section="admin" style="display: none;">👑 Admin Panel</li>
         </ul>
     </div>
 
@@ -32,7 +33,10 @@
     <div class="main-content">
         <!-- Header Section -->
         <div class="header">
-            <h2>Welcome, User</h2>
+            <h2>
+                <span class="welcome-text">Welcome,</span>
+                <span class="userName">User</span>
+            </h2>
         </div>
 
         <!-- Stats Section -->
@@ -56,10 +60,17 @@
             <!-- Task items will be dynamically added here -->
             <div class="loading-message">Loading tasks...</div>
         </div>
+
+        <div id="queue-container" class="hidden">
+            <div id="queue-content"></div>
+        </div>
+
+      
+
     </div>
 
     <!-- Add this script tag to link the dashboard.js file -->
-    <script src="dashboard.js"></script>
+    <script type="module" src="dashboard.js"></script>
 </body>
 
 </html>

@@ -18,14 +18,46 @@ async function initDocumentViewer() {
         }
 
         console.log("Loading document from:", fileUrl);
-        initPdf(fileUrl); // Load the PDF in viewer
 
+        // Get the file extension
+        const fileExtension = fileUrl.split('.').pop().toLowerCase();
+
+        // Get the container where the document will be displayed
+        const contentContainer = document.querySelector('.document-content');
+        contentContainer.innerHTML = ''; // Clear previous content
+
+        if (fileExtension === 'pdf') {
+            // PDF file: Use PDF.js
+            contentContainer.innerHTML = `<canvas id="pdf-canvas"></canvas>`;
+            initPdf(fileUrl);
+        } else if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp'].includes(fileExtension)) {
+            // Image file: Display in an <img> tag
+            contentContainer.innerHTML = `<img src="${fileUrl}" alt="Document Image" class="document-image" style="max-width: 100%; height: auto;">`;
+        } else if (['txt', 'json', 'csv'].includes(fileExtension)) {
+            // Text file: Fetch and display as plain text
+            const response = await fetch(fileUrl);
+            const text = await response.text();
+            contentContainer.innerHTML = `<pre class="document-text">${text}</pre>`;
+        } else if (['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'].includes(fileExtension)) {
+            // Office files: Provide a Google Docs viewer or download link
+            contentContainer.innerHTML = `
+                <iframe src="https://docs.google.com/gview?url=${fileUrl}&embedded=true" 
+                        class="document-frame" style="width:100%; height:600px; border: none;"></iframe>
+                <p><a href="${fileUrl}" target="_blank" download>Download file</a></p>
+            `;
+        } else {
+            // Unsupported format: Show a download link
+            contentContainer.innerHTML = `
+                <p>Unsupported file format. <a href="${fileUrl}" target="_blank" download>Download file</a></p>
+            `;
+        }
     } catch (error) {
         console.error("Error initializing document viewer:", error);
         document.querySelector('.document-content').innerHTML =
             '<p class="error-message">Error loading document. Please try again later.</p>';
     }
 }
+
 
 // Helper function to remove loading text
 function removeLoadingText() {
@@ -94,185 +126,6 @@ function renderPage(pageNum) {
     });
 }
 
-// Function to load comments
-async function loadComments() {
-    try {
-        const jwt = localStorage.getItem("jwt");
-        if (!jwt) {
-            console.error("No authentication token found.");
-            return;
-        }
-
-        const documentId = sessionStorage.getItem("selectedTaskId");
-
-        if (!documentId) {
-            // Make sure we have the right structure
-            ensureCommentSectionStructure();
-            document.querySelector('.comments-container').innerHTML =
-                '<p class="error-message">No document selected. Please select a task.</p>';
-            return;
-        }
-
-        console.log("Fetching comments for document ID:", documentId);
-
-        const response = await fetch(`https://etmf.somee.com/api/Comment/index?documentId=${documentId}`, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${jwt}`,
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const comments = await response.json();
-        console.log("Comments received:", comments);
-
-        // Ensure we have the proper structure before loading comments
-        ensureCommentSectionStructure();
-        
-        const commentsContainer = document.querySelector('.comments-container');
-        commentsContainer.innerHTML = ""; // Clear previous comments
-
-        if (comments.length === 0) {
-            commentsContainer.innerHTML = "<p>No comments found for this document.</p>";
-            return;
-        }
-
-        comments.forEach(comment => {
-            const commentDiv = document.createElement("div");
-            commentDiv.classList.add("comment");
-            commentDiv.innerHTML = `
-                <div class="comment-author">Student ${comment.studentId}</div>
-                <div class="comment-text">${comment.comment1}</div>
-                <div class="comment-time">${new Date(comment.createdAt).toLocaleString()}</div>
-            `;
-            commentsContainer.appendChild(commentDiv);
-        });
-
-    } catch (error) {
-        console.error("Error loading comments:", error);
-        ensureCommentSectionStructure();
-        document.querySelector('.comments-container').innerHTML =
-            '<p class="error-message">Error loading comments. Please try again later.</p>';
-    }
-}
-
-// Function to add a comment
-// Function to add a comment
-async function addComment() {
-    try {
-        const jwt = localStorage.getItem("jwt");
-        if (!jwt) {
-            alert("No authentication token found. Please log in.");
-            return;
-        }
-
-        // const studentId = localStorage.getItem("userId"); // Get logged-in user ID
-        // const documentId = sessionStorage.getItem("selectedTaskId");
-        // const commentInput = document.querySelector(".comment-input");
-
-        const studentId = 3; // Get logged-in user ID
-        const documentId = 1;
-        const commentInput = document.querySelector(".comment-input");
-
-
-
-        console.log(studentId,documentId,commentInput);
-
-        if (!documentId) {
-            alert("No document selected. Please select a task.");
-            return;
-        }
-
-        if (!commentInput.value.trim()) {
-            alert("Comment cannot be empty!");
-            return;
-        }
-
-        const commentText = commentInput.value.trim();
-
-        const response = await fetch("https://etmf.somee.com/api/Comment/comment", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${jwt}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                studentId: studentId,
-                documentId: documentId,
-                comment1: commentText
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log("Comment added:", result);
-        alert("✅ Comment added successfully!");
-
-        // Clear input field after successful comment
-        commentInput.value = "";
-
-        // Reload comments to show the new one
-        loadComments();
-
-    } catch (error) {
-        console.error("Error adding comment:", error);
-        alert("❌ Failed to add comment. Please try again.");
-    }
-}
-
-// Attach event listener to Send button
-document.addEventListener("DOMContentLoaded", function () {
-    const sendButton = document.querySelector(".send-button");
-    if (sendButton) {
-        sendButton.addEventListener("click", addComment);
-    }
-});
-
-
-// Attach event listener to Send button
-document.addEventListener("DOMContentLoaded", function () {
-    const sendButton = document.querySelector(".send-button");
-    if (sendButton) {
-        sendButton.addEventListener("click", addComment);
-    }
-});
-
-
-function ensureCommentSectionStructure() {
-    const commentSection = document.querySelector('.comment-section');
-    
-    // If the structure isn't already in place, create it
-    if (!document.querySelector('.comments-container')) {
-        // Save any existing content to reuse
-        const existingContent = commentSection.innerHTML;
-        
-        // Create the proper structure
-        commentSection.innerHTML = `
-            <div class="comment-header">
-                <h3>Comments</h3>
-            </div>
-            <div class="comments-container"></div>
-            <div class="comment-input-form">
-                <textarea class="comment-input" placeholder="Add a comment..."></textarea>
-                <button class="send-button">Send</button>
-            </div>
-        `;
-        
-        // If there was existing content and no proper structure, 
-        // it might have been error messages - place them in comments container
-        if (existingContent && existingContent.includes('error-message')) {
-            document.querySelector('.comments-container').innerHTML = existingContent;
-        }
-    }
-}
-
 // Navigation controls for PDF
 document.getElementById('prev-page').addEventListener('click', function() {
     if (pdfDoc && currentPage > 1) {
@@ -307,6 +160,34 @@ document.addEventListener("keydown", function (event) {
 // Load comments when the document viewer is initialized
 document.addEventListener('DOMContentLoaded', function() {
     initDocumentViewer();
-    ensureCommentSectionStructure(); // Make sure structure is in place first
-    loadComments(); // Then load comments
 });
+
+// Function to show the custom modal
+function showModal(message, callback = null) {
+    const modal = document.getElementById("custom-modal");
+    const messageBox = document.getElementById("modal-message");
+    const closeButton = document.querySelector(".close-modal");
+    const okButton = document.getElementById("modal-ok");
+
+    // Set message text
+    messageBox.textContent = message;
+    modal.style.display = "block";
+
+    // Function to close modal
+    function closeModal() {
+        modal.style.display = "none";
+        if (callback) callback();
+    }
+
+    // Close modal on "X" or OK button click
+    closeButton.onclick = closeModal;
+    okButton.onclick = closeModal;
+
+    // Close modal if user clicks outside content
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            closeModal(); 
+        }
+    };
+}
+
