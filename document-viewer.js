@@ -30,14 +30,23 @@ async function initDocumentViewer() {
             // PDF file: Use PDF.js
             contentContainer.innerHTML = `<canvas id="pdf-canvas"></canvas>`;
             initPdf(fileUrl);
-        } else if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp'].includes(fileExtension)) {
+        } else if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp', 'avif'].includes(fileExtension)) {
             // Image file: Display in an <img> tag
             contentContainer.innerHTML = `<img src="${fileUrl}" alt="Document Image" class="document-image" style="max-width: 100%; height: auto;">`;
         } else if (['txt', 'json', 'csv'].includes(fileExtension)) {
             // Text file: Fetch and display as plain text
             const response = await fetch(fileUrl);
             const text = await response.text();
-            contentContainer.innerHTML = `<pre class="document-text">${text}</pre>`;
+            const escapedText = text
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#039;');
+            
+            // Set proper styling for text content
+            contentContainer.innerHTML = `<pre class="document-text" style="margin-top: 0; padding-top: 0; overflow-y: auto; max-height: 100%;">${escapedText}</pre>`;
+            contentContainer.scrollTop = 0;
         } else if (['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'].includes(fileExtension)) {
             // Office files: Provide a Google Docs viewer or download link
             contentContainer.innerHTML = `
