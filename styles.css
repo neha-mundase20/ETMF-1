@@ -1,39 +1,127 @@
 /* General Styles */
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f0f4f8;
+    background: linear-gradient(125deg, #a6d1e6 0%, #b7e4c7 50%, #f7ecb0 100%);
+    background-size: 400% 400%;
+    animation: softGradientShift 20s ease infinite;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    height: auto;
     min-height: 100vh;
     margin: 0;
     padding: 20px;
-    transition: background-color 0.3s ease;
+    position: relative;
+    overflow-x: hidden;
 }
 
-/* Container Box */
+
+/* Animated gradient background */
+@keyframes softGradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Subtle texture overlay */
+body::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.02) 70%);
+    pointer-events: none;
+}
+
+/* Soft floating accent circles in the same color palette */
+body::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 25%, rgba(166, 209, 230, 0.4) 0%, rgba(166, 209, 230, 0) 15%),
+        radial-gradient(circle at 75% 44%, rgba(183, 228, 199, 0.3) 0%, rgba(183, 228, 199, 0) 18%),
+        radial-gradient(circle at 40% 80%, rgba(247, 236, 176, 0.3) 0%, rgba(247, 236, 176, 0) 16%);
+    animation: softFloat 25s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes softFloat {
+    0% { transform: translate(0%, 0%) scale(1); }
+    100% { transform: translate(1%, 2%) scale(1.03); }
+}
+
+/* Container Box - updated to work well with the pastel colors */
 .container {
     width: 530px;
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.85);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 
+                0 0 0 1px rgba(255, 255, 255, 0.4),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+    min-height: 500px;
 }
 
 .container:hover {
     transform: translateY(-5px);
-    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Subtle shiny overlay for container */
+.container::before {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: linear-gradient(45deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.05) 50%, 
+                rgba(255,255,255,0) 100%);
+    transform: rotate(30deg);
+    animation: softShine 8s infinite linear;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes softShine {
+    0% { transform: translateX(-100%) rotate(30deg); }
+    100% { transform: translateX(100%) rotate(30deg); }
 }
 
 /* Section Titles */
 h2 {
     font-size: 28px;
     font-weight: 600;
-    color: #2d3748;
+    background: linear-gradient(90deg, #4f9af8, #6d74e4);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
     margin-bottom: 5px;
     text-align: center;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+h2::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #4f9af8, #6d74e4);
+    margin: 8px auto 0;
+    border-radius: 3px;
 }
 
 .subtitle {
