@@ -184,7 +184,7 @@ document.getElementById("registerUser")?.addEventListener("click", async () => {
 document.getElementById("loginBtn")?.addEventListener("click", async () => {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
-  if (!email || !password) return alert("Enter email and password.");
+  if (!email || !password) return showModal("Enter Email & Password");
 
   try {
     const response = await fetch("https://etmf.somee.com/api/auth/login", {

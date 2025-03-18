@@ -15,10 +15,24 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".userName").textContent = userName;
   }
 
+  const logoutButton = document.getElementById("logout-button");
+
+    if (logoutButton) {
+        logoutButton.addEventListener("click", () => {
+            // Clear stored user data
+            localStorage.clear();
+            sessionStorage.clear();
+
+            // Redirect to login page
+            window.location.href = "index.html";
+        });
+    }
+
   // Get the admin button element
   const adminButton = document.getElementById("admin-button");
   const queueButton = document.getElementById("queue-button");
   const studentList = document.getElementById("studentList");
+
   // Show admin button only if the user role is 'admin'
   if (userRole === "admin") {
     adminButton.style.display = "block";

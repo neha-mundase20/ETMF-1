@@ -136,7 +136,7 @@ function renderQueueList(tasks) {
               <select id="status-filter">
                   <option value="all">All Status</option>
                   <option value="pending">Pending</option>
-                  <option value="inProcess">In Progress</option>
+                  <option value="in process">In Progress</option>
                   <option value="completed">Completed</option>
               </select>
           </div>
