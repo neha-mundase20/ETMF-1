@@ -71,7 +71,7 @@ function setupRoleSelection() {
 // Check if user is already registered and request OTP
 document.getElementById("sendOtpBtn")?.addEventListener("click", async () => {
   const email = document.getElementById("regEmail").value.trim();
-  if (!email) return alert("Please enter an email.");
+  if (!email) return showModal("Please enter an email.")
 
   try {
     const response = await fetch(
@@ -111,7 +111,7 @@ document.getElementById("verifyOtp")?.addEventListener("click", async () => {
   const otp = Array.from(document.querySelectorAll(".otp-box"))
     .map((input) => input.value)
     .join("");
-  if (otp.length !== 6) return alert("Please enter a 6-digit OTP.");
+  if (otp.length !== 6) return showModal("Please enter a 6-digit OTP.")
 
   try {
     const response = await fetch("https://etmf.somee.com/api/auth/verify-otp", {
@@ -149,8 +149,8 @@ document.getElementById("registerUser")?.addEventListener("click", async () => {
     document.querySelector('input[name="role"]:checked')?.value || "student";
   const jwt = localStorage.getItem("jwt");
 
-  if (!name || !email || !password) return alert("Fill all required fields.");
-  if (password !== confirmPassword) return alert("Passwords do not match.");
+  if (!name || !email || !password) return showModal("Fill all required fields.");
+  if (password !== confirmPassword) return showModal("Passwords do not match.");
 
   try {
     const response = await fetch("https://etmf.somee.com/api/auth/register", {
@@ -184,7 +184,7 @@ document.getElementById("registerUser")?.addEventListener("click", async () => {
 document.getElementById("loginBtn")?.addEventListener("click", async () => {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
-  if (!email || !password) return alert("Enter email and password.");
+  if (!email || !password) return showModal("Enter email and password.");
 
   try {
     const response = await fetch("https://etmf.somee.com/api/auth/login", {

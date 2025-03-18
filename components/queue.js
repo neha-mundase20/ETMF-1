@@ -136,7 +136,7 @@ function renderQueueList(tasks) {
               <select id="status-filter">
                   <option value="all">All Status</option>
                   <option value="pending">Pending</option>
-                  <option value="inProcess">In Progress</option>
+                  <option value="in process">In Progress</option>
                   <option value="completed">Completed</option>
               </select>
           </div>
@@ -161,9 +161,9 @@ function renderQueueList(tasks) {
                       <option value="pending" ${
                         task.status === "pending" ? "selected" : ""
                       }>Pending</option>
-                      <option value="inProcess" ${
-                        task.status === "in Process" ? "selected" : ""
-                      }>In Progress</option>
+                      <option value="in process" ${
+                        task.status === "in process" ? "selected" : ""
+                      }>In process</option>
                       <option value="completed" ${
                         task.status === "completed" ? "selected" : ""
                       }>Completed</option>
@@ -224,8 +224,6 @@ function renderQueueList(tasks) {
       if (taskIndex !== -1) {
         tasks[taskIndex].status = newStatus;
       }
-
-      alert(`Document status updated to ${newStatus} successfully!`);
     } catch (error) {
       console.error("Error updating task status:", error);
       alert("Failed to update document status. Please try again.");
