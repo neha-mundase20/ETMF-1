@@ -148,25 +148,20 @@ function renderQueueList(tasks) {
               <li class="task-item" data-status="${task.status || "pending"}">
                   <img src="./assets/folder.png" alt="folder">
                   <div class="task-details">
-                      <p class="task-name">${
-                        task.documentName || "Unnamed Task"
-                      }</p>
+                      <p class="task-name">${task.documentName || "Unnamed Task"
+      }</p>
                       <p class="task-date">Added: ${formatDate(
-                        task.dateAssigned || new Date()
-                      )}</p>
+        task.dateAssigned || new Date()
+      )}</p>
                   </div>
-                  <select class="status-dropdown" data-task-id="${
-                    task.documentId
-                  }">
-                      <option value="pending" ${
-                        task.status === "pending" ? "selected" : ""
-                      }>Pending</option>
-                      <option value="in process" ${
-                        task.status === "in process" ? "selected" : ""
-                      }>In process</option>
-                      <option value="completed" ${
-                        task.status === "completed" ? "selected" : ""
-                      }>Completed</option>
+                  <select class="status-dropdown" data-task-id="${task.documentId
+      }">
+                      <option value="pending" ${task.status === "pending" ? "selected" : ""
+      }>Pending</option>
+                      <option value="in process" ${task.status === "in process" ? "selected" : ""
+      }>In process</option>
+                      <option value="completed" ${task.status === "completed" ? "selected" : ""
+      }>Completed</option>
                   </select>
               </li>
           `;
@@ -186,17 +181,17 @@ function renderQueueList(tasks) {
 
         // Update the UI only if the API call is successful
         this.closest(".task-item").dataset.status = newStatus;
-        alert("Task status updated successfully!"); // Simple alert instead of showNotification
+        showModal("Task status updated successfully!");
       } catch (error) {
         console.error("Error updating task status:", error);
-        alert("Failed to update task status. Please try again.");
+        showModal("Failed to update task status. Please try again.");
       }
     });
   });
 
   async function updateTaskStatus(taskId, newStatus) {
     try {
-      const token = localStorage.getItem("jwt"); // Retrieve token here
+      const token = localStorage.getItem("jwt");
       if (!token) {
         throw new Error("Authentication token not found.");
       }
@@ -224,11 +219,17 @@ function renderQueueList(tasks) {
       if (taskIndex !== -1) {
         tasks[taskIndex].status = newStatus;
       }
+
+      // Show success modal instead of alert
+      showModal("Task status updated successfully!");
     } catch (error) {
       console.error("Error updating task status:", error);
-      alert("Failed to update document status. Please try again.");
+
+      // Show error modal instead of alert
+      showModal("Failed to update document status. Please try again.");
     }
   }
+
 
   // Add search functionality
   const searchInput = document.getElementById("queue-search");
@@ -271,36 +272,103 @@ export async function fetchQueueData() {
 
   const token = localStorage.getItem("jwt");
   if (!token) {
-    console.error("No token found, please login first");
-    queueContainer.innerHTML =
-      "<h2>s</h2><p>Authentication error. Please log in again.</p>";
-    return;
+      console.error("No token found, please login first");
+      queueContainer.innerHTML = "<h2>Error</h2><p>Authentication error. Please log in again.</p>";
+      showModal("Authentication error. Please log in again.");
+      return;
   }
 
   const userId = localStorage.getItem("userId");
 
   try {
-    const response = await fetch(
-      `https://etmf.somee.com/api/task/assigned/${userId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+      const response = await fetch(
+          `https://etmf.somee.com/api/task/assigned/${userId}`,
+          {
+              method: "GET",
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const tasks = await response.json();
-    console.log("Queue Tasks:", tasks);
-    renderQueueList(tasks);
+      const tasks = await response.json();
+      console.log("Queue Tasks:", tasks);
+      renderQueueList(tasks);
   } catch (error) {
-    console.error("Error fetching queue data:", error);
-    queueContainer.innerHTML =
-      "<h2>Queue Tasks</h2><p>Error loading queue data. Please try again later.</p>";
+      console.error("Error fetching queue data:", error);
+      queueContainer.innerHTML = "<h2>Queue Tasks</h2><p>Error loading queue data. Please try again later.</p>";
+
+      // Show error modal instead of alert
+      showModal("Error loading queue data. Please try again later.");
   }
 }
+
+
+// Function to create and show the modal
+function showModal(message) {
+  let modal = document.getElementById("custom-modal");
+
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "custom-modal";
+    modal.classList.add("modal");
+    modal.style.display = "flex";
+    modal.style.position = "fixed";
+    modal.style.zIndex = "1000";
+    modal.style.left = "0";
+    modal.style.top = "0";
+    modal.style.width = "100%";
+    modal.style.height = "100%";
+    modal.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    modal.style.alignItems = "center";
+    modal.style.justifyContent = "center";
+
+    // Modal Content
+    const modalContent = document.createElement("div");
+    modalContent.classList.add("modal-content");
+    modalContent.style.background = "white";
+    modalContent.style.padding = "20px";
+    modalContent.style.borderRadius = "8px";
+    modalContent.style.textAlign = "center";
+    modalContent.style.minWidth = "300px";
+    modalContent.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+
+    // Modal Message
+    const modalMessage = document.createElement("p");
+    modalMessage.id = "modal-message";
+    modalMessage.textContent = message;
+
+    // OK Button
+    const closeButton = document.createElement("button");
+    closeButton.id = "close-modal";
+    closeButton.textContent = "OK";
+    closeButton.style.padding = "10px 20px";
+    closeButton.style.backgroundColor = "#007bff";
+    closeButton.style.color = "white";
+    closeButton.style.border = "none";
+    closeButton.style.borderRadius = "5px";
+    closeButton.style.cursor = "pointer";
+    closeButton.style.fontWeight = "500";
+    closeButton.style.marginTop = "10px";
+
+    closeButton.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    // Append elements
+    modalContent.appendChild(modalMessage);
+    modalContent.appendChild(closeButton);
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+  } else {
+    // If modal already exists, just update the message and show it
+    document.getElementById("modal-message").textContent = message;
+    modal.style.display = "flex";
+  }
+}
+
